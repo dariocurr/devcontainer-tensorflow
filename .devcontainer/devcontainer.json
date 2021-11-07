@@ -1,0 +1,34 @@
+{
+	"name": "Python 3",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": "..",
+		"args": {
+			"TENSORFLOW_VERSION": "latest",
+		}
+	},
+	"settings": {
+		"python.pythonPath": "/usr/local/bin/python",
+		"python.languageServer": "Pylance",
+		"python.formatting.provider": "black",
+		"python.formatting.blackPath": "/usr/local/py-utils/bin/black",
+		"python.linting.flake8Path": "/usr/local/py-utils/bin/flake8",
+		"python.linting.enabled": true,
+		"python.linting.flake8Enabled": true,
+		"python.linting.mypyEnabled": false,
+		"[python]": {
+			"editor.formatOnSave": true,
+			"editor.formatOnSaveMode": "file",
+		},
+	},	
+	"extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"eamodio.gitlens",
+	],
+	"runArgs": [
+		"--env-file",
+		".env",
+	],
+	"remoteUser": "vscode",
+}
