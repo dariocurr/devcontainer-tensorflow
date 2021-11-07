@@ -1,16 +1,18 @@
-# Load variables
+# Select image
 ARG TENSORFLOW_VERSION
-
-# Choice image
 FROM tensorflow/tensorflow:${TENSORFLOW_VERSION}
 
 # Create vscode user
-RUN useradd -ms /bin/bash vscode
-
-# Update apt
-RUN apt update \
+RUN groupadd --gid 1000 vscode \
+	&& useradd --uid 1000 --gid 1000 -m vscode \
+	&& apt-get update \
 	&& apt upgrade -y \
-	&& apt install git -y
+	&& apt-get install -y sudo \
+	&& echo vscode ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/vscode \
+	&& chmod 0440 /etc/sudoers.d/vscode
+
+# Install git
+RUN apt install git -y
 
 # Allow the vscode user to pip install globally w/o sudo
 ENV PIP_TARGET=/usr/local/pip-global
