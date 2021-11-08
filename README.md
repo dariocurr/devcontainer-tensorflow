@@ -1,2 +1,1 @@
-# devcontainer-tensorflow
-Tensorflow dev container for VS Code
+# Try Out Development Containers: Tensorflow
