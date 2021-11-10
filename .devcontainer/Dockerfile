@@ -15,11 +15,6 @@ RUN groupadd --gid 1000 vscode \
 # install git
 RUN apt install git zsh -y
 
-# install ohmyzsh
-USER vscode
-RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-COPY .devcontainer/.zshrc .
-
 # allow the vscode user to pip install globally w/o sudo
 ENV PIP_TARGET=/usr/local/pip-global
 ENV PYTHONPATH=${PIP_TARGET}:${PYTHONPATH}
@@ -35,3 +30,8 @@ COPY requirements*.txt tmp/pip-tmp/
 RUN pip install --upgrade pip \
 	&& pip --no-cache-dir install -r tmp/pip-tmp/requirements.txt -r tmp/pip-tmp/requirements-dev.txt \
 	&& rm -rf tmp/pip-tmp
+
+# install ohmyzsh
+USER vscode
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+COPY .devcontainer/.zshrc .
