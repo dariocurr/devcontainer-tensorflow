@@ -1,6 +1,7 @@
 # select image
-ARG TENSORFLOW_VERSION
+ARG TENSORFLOW_VERSION="latest"
 FROM tensorflow/tensorflow:${TENSORFLOW_VERSION}
+LABEL author="dariocurr@gmail.com" maintainer="dariocurr@gmail.com" version="0.0.1"
 
 # create vscode user
 RUN groupadd --gid 1000 vscode \
@@ -14,11 +15,6 @@ RUN groupadd --gid 1000 vscode \
 # install git
 RUN apt install git zsh -y
 
-# install ohmyzsh
-USER vscode
-RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-COPY .devcontainer/.zshrc .
-
 # allow the vscode user to pip install globally w/o sudo
 ENV PIP_TARGET=/usr/local/pip-global
 ENV PYTHONPATH=${PIP_TARGET}:${PYTHONPATH}
@@ -30,7 +26,12 @@ RUN if ! cat /etc/group | grep -e "^pip-global:" > /dev/null 2>&1; then groupadd
 	&& ( [ ! -f "/etc/profile.d/00-restore-env.sh" ] || sed -i -e "s/export PATH=/export PATH=\/usr\/local\/pip-global:/" /etc/profile.d/00-restore-env.sh )
 
 # update pip and install packages
-COPY requirements*.txt /tmp/pip-tmp/
+COPY requirements*.txt tmp/pip-tmp/
 RUN pip install --upgrade pip \
-	&& pip --no-cache-dir install -r /tmp/pip-tmp/requirements.txt -r /tmp/pip-tmp/requirements-dev.txt \
-	&& rm -rf /tmp/pip-tmp
+	&& pip --no-cache-dir install -r tmp/pip-tmp/requirements.txt -r tmp/pip-tmp/requirements-dev.txt \
+	&& rm -rf tmp/pip-tmp
+
+# install ohmyzsh
+USER vscode
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+COPY .devcontainer/.zshrc .
