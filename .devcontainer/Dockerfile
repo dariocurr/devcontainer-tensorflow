@@ -1,8 +1,7 @@
 # select image
-ARG TENSORFLOW_VERSION
+ARG TENSORFLOW_VERSION="latest"
 FROM tensorflow/tensorflow:${TENSORFLOW_VERSION}
 LABEL author="dariocurr@gmail.com" maintainer="dariocurr@gmail.com" version="0.0.1"
-
 
 # create vscode user
 RUN groupadd --gid 1000 vscode \
