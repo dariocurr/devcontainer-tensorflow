@@ -1,3 +1,5 @@
+# for format details, see https://docs.docker.com/engine/reference/builder/
+
 # select image
 ARG TENSORFLOW_VERSION="latest"
 FROM tensorflow/tensorflow:${TENSORFLOW_VERSION}
