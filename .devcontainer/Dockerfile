@@ -14,8 +14,8 @@ RUN groupadd --gid 1000 vscode \
 	&& echo vscode ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/vscode \
 	&& chmod 0440 /etc/sudoers.d/vscode
 
-# install git and zsh
-RUN apt install git zsh -y
+# install git
+RUN apt install git -y
 
 # allow the vscode user to pip install globally w/o sudo
 ENV PIP_TARGET=/usr/local/pip-global
@@ -33,7 +33,8 @@ RUN pip install --upgrade pip \
 	&& pip --no-cache-dir install -r tmp/pip-tmp/requirements.txt -r tmp/pip-tmp/requirements-dev.txt \
 	&& rm -rf tmp/pip-tmp
 
-# install ohmyzsh
+# install zsh
 USER vscode
-RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-COPY .devcontainer/.zshrc .
+RUN sudo apt install zsh -y \
+	&& sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+COPY .devcontainer/.zshrc /home/vscode/
