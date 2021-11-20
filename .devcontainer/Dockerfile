@@ -8,14 +8,14 @@ LABEL author="dariocurr@gmail.com" maintainer="dariocurr@gmail.com" version="0.0
 # create vscode user
 RUN groupadd --gid 1000 vscode \
 	&& useradd --uid 1000 --gid 1000 -m vscode \
-	&& apt update \
-	&& apt upgrade -y \
-	&& apt install -y sudo \
+	&& apt -qq update \
+	&& apt -qq upgrade -y \
+	&& apt -qq install -y sudo \
 	&& echo vscode ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/vscode \
 	&& chmod 0440 /etc/sudoers.d/vscode
 
 # install git
-RUN apt install git -y
+RUN apt -qq install git -y
 
 # allow the vscode user to pip install globally w/o sudo
 ENV PIP_TARGET=/usr/local/pip-global
@@ -29,13 +29,13 @@ RUN if ! cat /etc/group | grep -e "^pip-global:" > /dev/null 2>&1; then groupadd
 
 # update pip and install packages
 COPY requirements*.txt tmp/pip-tmp/
-RUN pip install --upgrade pip \
-	&& pip --no-cache-dir install -r tmp/pip-tmp/requirements.txt -r tmp/pip-tmp/requirements-dev.txt \
+RUN pip --no-cache-dir -q install --upgrade pip \
+	&& pip --no-cache-dir -q install -r tmp/pip-tmp/requirements.txt -r tmp/pip-tmp/requirements-dev.txt \
 	&& rm -rf tmp/pip-tmp
 
 # install zsh
 USER vscode
 WORKDIR /home/vscode/
-RUN sudo apt install zsh -y \
-	&& git clone https://github.com/zsh-users/antigen.git .antigen
+RUN sudo apt -qq install zsh -y \
+	&& git clone -q https://github.com/zsh-users/antigen.git .antigen
 COPY .devcontainer/.zshrc .
