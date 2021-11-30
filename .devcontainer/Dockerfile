@@ -37,5 +37,5 @@ RUN pip --no-cache-dir -q install --upgrade pip \
 USER vscode
 WORKDIR /home/vscode/
 RUN sudo apt -qq install zsh -y \
-	&& git clone -q https://github.com/zsh-users/antigen.git .antigen \
-	&& curl -s https://raw.githubusercontent.com/dariocurr/.zshrc/main/.zshrc --output .zshrc
+	&& git clone -q https://github.com/zsh-users/antigen.git .antigen
+ADD --chown=vscode https://git.io/JMakD .zshrc
