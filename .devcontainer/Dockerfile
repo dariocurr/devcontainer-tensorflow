@@ -7,7 +7,7 @@ FROM tensorflow/tensorflow:${VARIANT}
 LABEL author="dariocurr@gmail.com" maintainer="dariocurr@gmail.com" version="0.0.1"
 
 # read and create user
-ARG USER
+ARG USER="vscode"
 RUN groupadd --gid 1000 ${USER} \
 	&& useradd --uid 1000 --gid 1000 -m ${USER} \
 	&& apt -qq update \
